@@ -1,0 +1,22 @@
+# CI steps for all branches:
+-
+  assembly_info:
+    patch: false
+  build_script:
+    build.cmd
+  test: off
+  image: 
+    Visual Studio 2017
+# For master only:
+-
+  branches:
+    only:
+      - master
+  version: 1.1.{build}
+  build_script:
+    build.cmd version=%APPVEYOR_BUILD_VERSION%
+  test: off
+  image: 
+    Visual Studio 2017
+  deploy_script:
+    build.cmd "PushPackage" -st nugetKey=%nugetKey% version=%APPVEYOR_BUILD_VERSION%
