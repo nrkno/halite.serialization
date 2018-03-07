@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,6 +12,19 @@ namespace Halite.Serialization.JsonNet
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var objectType = value.GetType();
+
+            try
+            {
+                DoWriteJson(writer, value, serializer, objectType);
+            }
+            catch (Exception ex)
+            {
+                throw new JsonWriterException($"Failed to serialize object of type {objectType}!", ex);
+            }
+        }
+
+        private static void DoWriteJson(JsonWriter writer, object value, JsonSerializer serializer, Type objectType)
+        {
             var jo = new JObject();
 
             var properties = objectType.GetInheritanceChain().Reverse().SelectMany(it => it.GetImmediateProperties()).ToList();

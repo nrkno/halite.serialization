@@ -16,6 +16,20 @@ namespace Halite.Serialization.JsonNet
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            var objectType = value.GetType();
+
+            try
+            {
+                DoWriteJson(writer, value);
+            }
+            catch (Exception ex)
+            {
+                throw new JsonWriterException($"Failed to serialize object of type {objectType}!", ex);
+            }
+        }
+
+        private static void DoWriteJson(JsonWriter writer, object value)
+        {
             var link = (HalLinkObject) value;
 
             var maybeProperties = new object[]

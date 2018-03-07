@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
