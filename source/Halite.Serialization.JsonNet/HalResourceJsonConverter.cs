@@ -12,6 +12,19 @@ namespace Halite.Serialization.JsonNet
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var objectType = value.GetType();
+
+            try
+            {
+                DoWriteJson(writer, value, serializer, objectType);
+            }
+            catch (Exception ex)
+            {
+                throw new JsonWriterException($"Failed to serialize object of type {objectType}!", ex);
+            }
+        }
+
+        private static void DoWriteJson(JsonWriter writer, object value, JsonSerializer serializer, Type objectType)
+        {
             var jo = new JObject();
 
             var properties = objectType.GetInheritanceChain()
@@ -45,7 +58,14 @@ namespace Halite.Serialization.JsonNet
             var propVal = prop.GetValue(value, null);
             if (propVal != null)
             {
-                jo.Add(name, JToken.FromObject(propVal, serializer));
+                try
+                {
+                    jo.Add(name, JToken.FromObject(propVal, serializer));
+                }
+                catch (Exception ex)
+                {
+                    throw new JsonWriterException($"Failed to add property with name {name} and value {propVal}!", ex);
+                }
             }
         }
 
