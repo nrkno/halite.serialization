@@ -79,4 +79,4 @@ Target "PushPackage" (fun _ ->
 ==> "CreateNugetPackage"
 ==> "PushPackage"
 
-RunTargetOrDefault "CreatePackage"
+RunTargetOrDefault "CreateNugetPackage"
