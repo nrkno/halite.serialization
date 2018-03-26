@@ -32,6 +32,14 @@ Target "AddAssemblyVersion" (fun _ ->
             AssemblyVersion = version })  
 )
 
+Target "Build" (fun _ -> 
+    DotNetCli.Build (fun p -> 
+        { p with
+            Output = "../../" + buildDir
+            Configuration = "Release"
+            Project = projectReferences }) 
+)
+
 Target "BuildTests" (fun _ ->  MSBuild testOutputDir "Build" [ "Configuration", "Debug" ] testProjectReferences |> Log "TestBuild-Output: ")
 
 Target "RunTests" (fun _ ->
@@ -66,7 +74,6 @@ Target "PushPackage" (fun _ ->
 
 "Clean"
 ==> "AddAssemblyVersion"
-==> "Build"
 ==> "BuildTests"
 ==> "RunTests"
 ==> "CreateNugetPackage"
