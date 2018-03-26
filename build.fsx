@@ -1,9 +1,7 @@
 #r @"packages/FAKE/tools/FakeLib.dll"
 
 open Fake
-open Fake.AssemblyInfoFile
 open Fake.Git
-open Fake.MSBuildHelper
 open Fake.Testing.XUnit2
 open Fake.PaketTemplate
 
@@ -64,7 +62,7 @@ Target "CreatePaketTemplate" (fun _ ->
                     Include (buildDir + "Halite.Serialization.JsonNet.pdb", "lib/net45")
                     Include (buildDir + "Halite.Serialization.JsonNet.xml", "lib/net45") ]
           Dependencies = 
-            [ "Halite", GreaterOrEqual (Version "1.1.0")
+            [ "Halite", GreaterOrEqual (Version "1.2.0")
               "Newtonsoft.Json", GreaterOrEqual (Version "6.0.8") 
               "JetBrains.Annotations", GreaterOrEqual (Version "11.1.0") ]
     } )

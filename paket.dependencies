@@ -1,8 +1,8 @@
 source https://api.nuget.org/v3/index.json
 
-nuget Halite 1.1.42
-nuget Newtonsoft.Json 6.0.8 restriction: >= net45
-nuget JetBrains.Annotations 11.1.0 restriction: >= net45
+nuget Halite 1.2.58
+nuget Newtonsoft.Json >= 9.0.1
+nuget JetBrains.Annotations >= 11.1.0
 nuget Shouldly 2.8.3 restriction: >= net45
 nuget xunit 2.1.0 restriction: >= net45 
 nuget xunit.runner.console 2.1.0 restriction: >= net45
