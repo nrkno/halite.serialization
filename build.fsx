@@ -3,7 +3,6 @@
 open Fake
 open Fake.Git
 open Fake.Testing.XUnit2
-open Fake.PaketTemplate
 
 let buildDir = "./build/"
 let testProjects = "./source/*Tests/*.csproj"
@@ -18,6 +17,17 @@ let assemblyGuid = "670c2953-95c3-493c-a39c-987105130378"
 let commitHash = Information.getCurrentSHA1(".")
 let templateFilePath = "./Halite.Serialization.JsonNet.paket.template"
 let toolPathPaket = ".paket/paket.exe"
+
+let nugetSources = (environVarOrDefault "nuget.sources" "https://api.nuget.org/v3/index.json,https://www.myget.org/F/nrk/auth/c64eb6ac-a674-493a-9099-320dee35da47/api/v3/index.json").Split([|','|]) 
+                    |> Array.toList
+                    |> List.map (fun source -> "-s " + source)
+
+Target "Restore" (fun _ ->
+    DotNetCli.Restore (fun p ->
+        {p with
+            AdditionalArgs = nugetSources
+            Project = "./source/Halite.Serialization.JsonNet/Halite.Serialization.JsonNet.csproj" })   
+)
 
 Target "Clean" (fun _ ->
   CleanDirs [buildDir; testOutputDir]
@@ -74,6 +84,8 @@ Target "PushPackage" (fun _ ->
 
 "Clean"
 ==> "AddAssemblyVersion"
+==> "Restore"
+==> "Build"
 ==> "BuildTests"
 ==> "RunTests"
 ==> "CreateNugetPackage"
