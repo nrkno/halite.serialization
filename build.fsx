@@ -74,7 +74,7 @@ Target "CreatePaketTemplate" (fun _ ->
                     Include (buildDir + "Halite.Serialization.JsonNet.pdb", targetLib)
                     Include (buildDir + "Halite.Serialization.JsonNet.xml", targetLib) ]
           Dependencies = 
-            [ "Halite", GreaterOrEqual (Version "1.2.0")
+            [ "Halite", GreaterOrEqual (Version "1.2.58")
               "Newtonsoft.Json", GreaterOrEqual (Version "9.0.1") 
               "JetBrains.Annotations", GreaterOrEqual (Version "11.1.0") ]
     } )
