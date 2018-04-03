@@ -3,6 +3,7 @@
 open Fake
 open Fake.Git
 open Fake.Testing.XUnit2
+open Fake.PaketTemplate
 
 let buildDir = "./build/"
 let testProjects = "./source/*Tests/*.csproj"
@@ -58,6 +59,39 @@ Target "RunTests" (fun _ ->
                  { p with HtmlOutputPath = Some (testOutputDir @@ "xunit.html") })
 )
 
+Target "CreatePaketTemplate" (fun _ ->
+  let targetLib = "lib/netstandard1.0"
+  PaketTemplate (fun p ->
+    {
+        p with
+          TemplateFilePath = Some templateFilePath
+          TemplateType = File
+          Description = ["Support for serialization of Halite objects using Json.NET."]
+          Id = Some projectName
+          Version = Some version
+          Authors = ["NRK"]
+          Files = [ Include (buildDir + "Halite.Serialization.JsonNet.dll", targetLib)
+                    Include (buildDir + "Halite.Serialization.JsonNet.pdb", targetLib)
+                    Include (buildDir + "Halite.Serialization.JsonNet.xml", targetLib) ]
+          Dependencies = 
+            [ "Halite", GreaterOrEqual (Version "1.2.0")
+              "Newtonsoft.Json", GreaterOrEqual (Version "9.0.1") 
+              "JetBrains.Annotations", GreaterOrEqual (Version "11.1.0") ]
+    } )
+)
+
+Target "CreatePackage" (fun _ ->
+    Paket.Pack (fun p ->
+      {
+          p with
+              Version = version
+              ReleaseNotes = "fake release"
+              OutputPath = buildDir
+              TemplateFile = templateFilePath
+              BuildConfig = "Release"
+              ToolPath = toolPathPaket })
+)
+
 Target "CreateNugetPackage" (fun _ -> 
     DotNetCli.Pack (fun c -> 
         { c with
@@ -88,7 +122,8 @@ Target "PushPackage" (fun _ ->
 ==> "Build"
 ==> "BuildTests"
 ==> "RunTests"
-==> "CreateNugetPackage"
+==> "CreatePaketTemplate"
+==> "CreatePackage"
 ==> "PushPackage"
 
-RunTargetOrDefault "CreateNugetPackage"
+RunTargetOrDefault "CreatePackage"
