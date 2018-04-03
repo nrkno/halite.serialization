@@ -60,7 +60,7 @@ Target "RunTests" (fun _ ->
 )
 
 Target "CreatePaketTemplate" (fun _ ->
-  let targetLib = "lib/netstandard1.0"
+  let targetLib = "lib/netstandard2.0"
   PaketTemplate (fun p ->
     {
         p with
