@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Shouldly;
 using Xunit;
 
@@ -70,6 +69,19 @@ namespace Halite.Tests
             var json = Serialize(turtle);
             var expectedJson =
                 "{\"_links\":{\"self\":{\"href\":\"/turtle2\"}},\"_embedded\":{\"down\":{\"_links\":{\"self\":{\"href\":\"/turtle1\"}},\"_embedded\":{\"down\":{\"_links\":{\"self\":{\"href\":\"/turtle0\"}}}}}}}";
+            json.ShouldBe(expectedJson);
+        }
+
+        [Fact]
+        public void VerifyResourceSerializationRespectNamingStrategy()
+        {
+            var snake = new SnakeResorce { Links = new HalLinks(new SelfLink("/snake")) , LongTail = "yes"};
+
+            var settings = new JsonSerializerSettings { ContractResolver = new CustomSnakeCasingContractResolver() };
+            settings.ConfigureForHalite();
+
+            var json = JsonConvert.SerializeObject(snake, settings);
+            var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}},\"long_tail\":\"yes\"}";
             json.ShouldBe(expectedJson);
         }
 

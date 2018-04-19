@@ -42,7 +42,7 @@ namespace Halite.Serialization.JsonNet
 
             foreach (var prop in regularProperties.Where(p => p.CanRead))
             {
-                AddPropertyValue(jo, prop.GetPropertyName(), prop, value, serializer);
+                AddPropertyValue(jo, prop.GetPropertyName(serializer), prop, value, serializer);
             }
 
             if (embeddedProperty != null)
@@ -103,7 +103,7 @@ namespace Halite.Serialization.JsonNet
             foreach (var prop in properties)
             {
                 var jop = jo.Properties().FirstOrDefault(it =>
-                    string.Equals(it.Name, prop.GetPropertyName(), StringComparison.InvariantCultureIgnoreCase));
+                    string.Equals(it.Name, prop.GetPropertyName(serializer), StringComparison.InvariantCultureIgnoreCase));
                 if (jop != null)
                 {
                     var currentValue = prop.GetMethod.Invoke(instance, new object[0]);
@@ -142,7 +142,7 @@ namespace Halite.Serialization.JsonNet
                 throw CreateConstructorException(objectType);
             }
 
-            var jprop = item.Properties().FirstOrDefault(it => string.Equals(prop.GetPropertyName(), it.Name, StringComparison.InvariantCultureIgnoreCase));
+            var jprop = item.Properties().FirstOrDefault(it => string.Equals(prop.GetPropertyName(serializer), it.Name, StringComparison.InvariantCultureIgnoreCase));
             if (jprop == null)
             {
                 throw CreateConstructorException(objectType);
