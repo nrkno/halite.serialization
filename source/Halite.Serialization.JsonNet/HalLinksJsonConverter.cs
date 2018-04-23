@@ -33,7 +33,7 @@ namespace Halite.Serialization.JsonNet
                 var propVal = prop.GetValue(value, null);
                 if (propVal != null)
                 {
-                    jo.Add(prop.GetRelationName(), JToken.FromObject(propVal, serializer));
+                    jo.Add(prop.GetRelationName(serializer), JToken.FromObject(propVal, serializer));
                 }
             }
 
@@ -112,7 +112,7 @@ namespace Halite.Serialization.JsonNet
                 throw CreateConstructorException(objectType);
             }
 
-            var jprop = item.Properties().FirstOrDefault(it => string.Equals(prop.GetRelationName(), it.Name, StringComparison.InvariantCultureIgnoreCase));
+            var jprop = item.Properties().FirstOrDefault(it => string.Equals(prop.GetRelationName(serializer), it.Name, StringComparison.InvariantCultureIgnoreCase));
             if (jprop == null)
             {
                 throw CreateConstructorException(objectType);

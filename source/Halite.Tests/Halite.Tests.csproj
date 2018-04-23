@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConstantLink.cs" />
+    <Compile Include="CustomSnakeCasingContractResolver.cs" />
     <Compile Include="DummyEmbedded.cs" />
     <Compile Include="DummyLinks.cs" />
     <Compile Include="DummyResourceWithLinks.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="HalResourceSerializationTests.cs" />
     <Compile Include="HalTemplatedLinkSerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SnakeResource.cs" />
     <Compile Include="ThatLink.cs" />
     <Compile Include="ThisLink.cs" />
     <Compile Include="TurtleLinks.cs" />
