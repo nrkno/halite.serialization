@@ -75,7 +75,7 @@ namespace Halite.Tests
         [Fact]
         public void VerifyResourceSerializationRespectNamingStrategy()
         {
-            var snake = new SnakeResorce { Links = new HalLinks(new SelfLink("/snake")) , LongTail = "yes"};
+            var snake = new SnakeResource { Links = new HalLinks(new SelfLink("/snake")) , LongTail = "yes"};
 
             var settings = new JsonSerializerSettings { ContractResolver = new CustomSnakeCasingContractResolver() };
             settings.ConfigureForHalite();
