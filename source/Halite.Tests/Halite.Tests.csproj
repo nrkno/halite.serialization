@@ -43,6 +43,7 @@
     <Compile Include="DummyLinks.cs" />
     <Compile Include="DummyResourceWithLinks.cs" />
     <Compile Include="DummyResourceWithLinksAndEmbedded.cs" />
+    <Compile Include="DummyResourceWithPrivateConstructor.cs" />
     <Compile Include="EmbeddedTurtle.cs" />
     <Compile Include="HalLinkDeserializationTests.cs" />
     <Compile Include="HalLinksDeserializationTests.cs" />

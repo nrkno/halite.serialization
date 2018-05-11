@@ -132,7 +132,7 @@ namespace Halite.Serialization.JsonNet
 
         private static ConstructorInfo SelectConstructor(Type objectType)
         {
-            var constructors = objectType.GetConstructors();
+            var constructors = objectType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             return SelectAnnotatedJsonConstructor(constructors) ??
                    SelectDefaultConstructor(constructors) ??
