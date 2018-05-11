@@ -35,7 +35,7 @@ Target "Clean" (fun _ ->
 )
 
 Target "AddAssemblyVersion" (fun _ -> 
-    let assemblyInfos = !!(@"../**/AssemblyInfo.cs") 
+    let assemblyInfos = !!(@"src/**/AssemblyInfo.cs") 
 
     ReplaceAssemblyInfoVersionsBulk assemblyInfos (fun f -> 
         { f with 
