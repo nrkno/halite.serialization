@@ -116,9 +116,6 @@ namespace Halite.Serialization.JsonNet
             var documentProperties = item.Properties().ToList();
             var jprop = documentProperties.FirstOrDefault(it => string.Equals(relationName, it.Name, StringComparison.InvariantCultureIgnoreCase));
 
-            // If there is no argument for a given property, what to do?
-            // Accept nulls unless tagged with NotNull.
-
             if (jprop == null)
             {
                 return null;
