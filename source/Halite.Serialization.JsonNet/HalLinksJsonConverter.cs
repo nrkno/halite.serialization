@@ -139,10 +139,9 @@ namespace Halite.Serialization.JsonNet
             return new JsonSerializationException($"Unable to find a constructor to use for type {objectType}. A class should either have a default constructor, one constructor with arguments or a constructor marked with the JsonConstructor attribute.");
         }
 
-
         private static ConstructorInfo SelectConstructor(Type objectType)
         {
-            var constructors = objectType.GetConstructors();
+            var constructors = objectType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             return SelectAnnotatedJsonConstructor(constructors) ??
                    SelectDefaultConstructor(constructors) ??

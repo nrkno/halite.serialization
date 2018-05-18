@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Halite.Tests
 {
@@ -21,9 +23,14 @@ namespace Halite.Tests
         public IReadOnlyList<HalLink> Those { get; }
     }
 
-    internal class DummyLinksWithPrivateConstructor : HalLinks
+    public class MyAttribute : Attribute
     {
-        private DummyLinksWithPrivateConstructor(SelfLink self, ThisLink @this, ThatLink that, IReadOnlyList<HalLink> those) : base(self)
+        //...
+    }
+
+    internal class DummyLinksWithNotNullThis : HalLinks
+    {
+        public DummyLinksWithNotNullThis(SelfLink self, [NotNull] [My] ThisLink @this, ThatLink that, IReadOnlyList<HalLink> those) : base(self)
         {
             This = @this;
             That = that;
@@ -39,4 +46,5 @@ namespace Halite.Tests
         [HalRelation("those")]
         public IReadOnlyList<HalLink> Those { get; }
     }
+
 }
