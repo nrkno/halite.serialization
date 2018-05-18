@@ -1,3 +1,4 @@
+using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
@@ -10,7 +11,7 @@ namespace Halite.Tests
         public void VerifyMinimalHalLinksDeserialization()
         {
             const string json = "{\"self\":{\"href\":\"/things/1\"}}";
-            HalLinks links = JsonConvert.DeserializeObject<HalLinks>(json);
+            HalLinks links = Deserialize<HalLinks>(json);
             var self = links.Self;
             self.Href.ToString().ShouldBe("/things/1");
             self.Templated.ShouldBeNull();
@@ -20,7 +21,19 @@ namespace Halite.Tests
         public void VerifyDummyLinksDeserializationWithNulls()
         {
             const string json = "{\"self\":{\"href\":\"/things/1\"}}";
-            DummyLinks links = JsonConvert.DeserializeObject<DummyLinks>(json);
+            DummyLinks links = Deserialize<DummyLinks>(json);
+            var selfLink = links.Self;
+            selfLink.Href.ToString().ShouldBe("/things/1");
+            selfLink.Templated.ShouldBeNull();
+            links.This.ShouldBeNull();
+            links.That.ShouldBeNull();
+        }
+
+        [Fact]
+        public void VerifyDummyLinksDeserializationWithPrivateConstructor()
+        {
+            const string json = "{\"self\":{\"href\":\"/things/1\"}}";
+            DummyLinksWithPrivateConstructor links = Deserialize<DummyLinksWithPrivateConstructor>(json);
             var selfLink = links.Self;
             selfLink.Href.ToString().ShouldBe("/things/1");
             selfLink.Templated.ShouldBeNull();
@@ -32,12 +45,17 @@ namespace Halite.Tests
         public void VerifyDummyLinksDeserializationWithLinks()
         {
             const string json = "{\"self\":{\"href\":\"/things/1\"},\"this\":{\"href\":\"/this\"},\"that\":{\"href\":\"/that\"}}";
-            DummyLinks links = JsonConvert.DeserializeObject<DummyLinks>(json);
+            DummyLinks links = Deserialize<DummyLinks>(json);
             var selfLink = links.Self;
             selfLink.Href.ToString().ShouldBe("/things/1");
             selfLink.Templated.ShouldBeNull();
             links.This.Href.ToString().ShouldBe("/this");
             links.That.Href.ToString().ShouldBe("/that");
+        }
+
+        private static T Deserialize<T>(string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings().ConfigureForHalite());
         }
     }
 }

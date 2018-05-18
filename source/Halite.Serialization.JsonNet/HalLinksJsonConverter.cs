@@ -112,10 +112,16 @@ namespace Halite.Serialization.JsonNet
                 throw CreateConstructorException(objectType);
             }
 
-            var jprop = item.Properties().FirstOrDefault(it => string.Equals(prop.GetRelationName(serializer), it.Name, StringComparison.InvariantCultureIgnoreCase));
+            var relationName = prop.GetRelationName(serializer);
+            var documentProperties = item.Properties().ToList();
+            var jprop = documentProperties.FirstOrDefault(it => string.Equals(relationName, it.Name, StringComparison.InvariantCultureIgnoreCase));
+
+            // If there is no argument for a given property, what to do?
+            // Accept nulls unless tagged with NotNull.
+
             if (jprop == null)
             {
-                throw CreateConstructorException(objectType);
+                return null;
             }
 
             var val = jprop.Value.ToObject(parameter.ParameterType, serializer);
@@ -157,7 +163,6 @@ namespace Halite.Serialization.JsonNet
         {
             return ctors.Count == 1 ? ctors[0] : null;
         }
-
 
         public override bool CanConvert(Type objectType)
         {
