@@ -112,10 +112,13 @@ namespace Halite.Serialization.JsonNet
                 throw CreateConstructorException(objectType);
             }
 
-            var jprop = item.Properties().FirstOrDefault(it => string.Equals(prop.GetRelationName(serializer), it.Name, StringComparison.InvariantCultureIgnoreCase));
+            var relationName = prop.GetRelationName(serializer);
+            var documentProperties = item.Properties().ToList();
+            var jprop = documentProperties.FirstOrDefault(it => string.Equals(relationName, it.Name, StringComparison.InvariantCultureIgnoreCase));
+
             if (jprop == null)
             {
-                throw CreateConstructorException(objectType);
+                return null;
             }
 
             var val = jprop.Value.ToObject(parameter.ParameterType, serializer);
@@ -133,10 +136,9 @@ namespace Halite.Serialization.JsonNet
             return new JsonSerializationException($"Unable to find a constructor to use for type {objectType}. A class should either have a default constructor, one constructor with arguments or a constructor marked with the JsonConstructor attribute.");
         }
 
-
         private static ConstructorInfo SelectConstructor(Type objectType)
         {
-            var constructors = objectType.GetConstructors();
+            var constructors = objectType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             return SelectAnnotatedJsonConstructor(constructors) ??
                    SelectDefaultConstructor(constructors) ??
@@ -157,7 +159,6 @@ namespace Halite.Serialization.JsonNet
         {
             return ctors.Count == 1 ? ctors[0] : null;
         }
-
 
         public override bool CanConvert(Type objectType)
         {

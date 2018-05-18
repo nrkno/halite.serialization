@@ -41,6 +41,7 @@
     <Compile Include="CustomSnakeCasingContractResolver.cs" />
     <Compile Include="DummyEmbedded.cs" />
     <Compile Include="DummyLinks.cs" />
+    <Compile Include="DummyLinksWithPrivateConstructor.cs" />
     <Compile Include="DummyResourceWithLinks.cs" />
     <Compile Include="DummyResourceWithLinksAndEmbedded.cs" />
     <Compile Include="DummyResourceWithPrivateConstructor.cs" />
