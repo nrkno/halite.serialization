@@ -85,9 +85,50 @@ namespace Halite.Tests
             json.ShouldBe(expectedJson);
         }
 
+        [Fact]
+        public void VerifyResourceSerializationRespectNullHandlingInclude()
+        {
+            var snake = new SnakeResource { Links = new HalLinks(new SelfLink("/snake")) };
+
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include
+            };
+
+            settings.ConfigureForHalite();
+
+            var json = JsonConvert.SerializeObject(snake, settings);
+            var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}},\"LongTail\":null}";
+            json.ShouldBe(expectedJson);
+        }
+
+        [Fact]
+        public void VerifyResourceSerializationRespectNullHandlingIgnore()
+        {
+            var snake = new SnakeResource { Links = new HalLinks(new SelfLink("/snake")) };
+
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            settings.ConfigureForHalite();
+
+            var json = JsonConvert.SerializeObject(snake, settings);
+            var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}}}";
+            json.ShouldBe(expectedJson);
+        }
+
         private static string Serialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj, new JsonSerializerSettings().ConfigureForHalite());
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+
+            settings.ConfigureForHalite();
+
+            return JsonConvert.SerializeObject(obj, settings);
         }
     }
 }

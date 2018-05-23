@@ -56,6 +56,7 @@ namespace Halite.Serialization.JsonNet
         private static void AddPropertyValue(JObject jo, string name, PropertyInfo prop, object value, JsonSerializer serializer)
         {
             var propVal = prop.GetValue(value, null);
+
             if (propVal != null)
             {
                 try
@@ -66,6 +67,10 @@ namespace Halite.Serialization.JsonNet
                 {
                     throw new JsonWriterException($"Failed to add property with name {name} and value {propVal}!", ex);
                 }
+            }
+            else if (serializer.NullValueHandling == NullValueHandling.Include)
+            {
+                jo.Add(name, null);
             }
         }
 
@@ -157,7 +162,6 @@ namespace Halite.Serialization.JsonNet
             return objectType.GetProperties().FirstOrDefault(it =>
                 string.Equals(it.Name, parameterName, StringComparison.InvariantCultureIgnoreCase));
         }
-
 
         private static ConstructorInfo SelectConstructor(Type objectType)
         {
