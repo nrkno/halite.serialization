@@ -22,5 +22,10 @@ namespace Halite.Serialization.JsonNet
                                       | BindingFlags.Instance
                                       | BindingFlags.DeclaredOnly);
         }
+
+        public static object GetDefaultValue(this Type t)
+        {
+            return t.IsValueType && Nullable.GetUnderlyingType(t) == null ? Activator.CreateInstance(t) : null;
+        }
     }
 }

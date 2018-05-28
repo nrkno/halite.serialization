@@ -74,9 +74,37 @@ namespace Halite.Tests
             links.That.Href.ToString().ShouldBe("/that");
         }
 
+        [Fact]
+        public void VerifyHalLinksWithJsonProperty()
+        {
+            string json =
+                @"{
+    ""self"": {
+      ""href"": ""/me/myself/i""
+    },
+    ""ad:hoc"": {
+      ""href"": ""/some/ad/hoc/link""
+    }
+}";
+            var links = Deserialize<SomeHalLinks>(json);
+            links.Self.Href.ToString().ShouldBe("/me/myself/i");
+            links.AdhocLink.Href.ToString().ShouldBe("/some/ad/hoc/link");
+        }
+
         private static T Deserialize<T>(string json)
         {
             return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings().ConfigureForHalite());
         }
+    }
+
+    internal class SomeHalLinks : HalLinks
+    {
+        public SomeHalLinks(SelfLink self, HalLink adhocLink) : base(self)
+        {
+            AdhocLink = adhocLink;
+        }
+
+        [JsonProperty(PropertyName = "ad:hoc")]
+        public HalLink AdhocLink { get; }
     }
 }

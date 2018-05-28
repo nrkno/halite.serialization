@@ -23,14 +23,9 @@ namespace Halite.Tests
         public IReadOnlyList<HalLink> Those { get; }
     }
 
-    public class MyAttribute : Attribute
-    {
-        //...
-    }
-
     internal class DummyLinksWithNotNullThis : HalLinks
     {
-        public DummyLinksWithNotNullThis(SelfLink self, [NotNull] [My] ThisLink @this, ThatLink that, IReadOnlyList<HalLink> those) : base(self)
+        public DummyLinksWithNotNullThis(SelfLink self, [NotNull] ThisLink @this, ThatLink that, IReadOnlyList<HalLink> those) : base(self)
         {
             This = @this;
             That = that;
