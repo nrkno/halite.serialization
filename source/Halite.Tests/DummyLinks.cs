@@ -41,5 +41,4 @@ namespace Halite.Tests
         [HalRelation("those")]
         public IReadOnlyList<HalLink> Those { get; }
     }
-
 }

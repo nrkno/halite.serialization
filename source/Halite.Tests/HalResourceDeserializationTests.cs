@@ -9,6 +9,12 @@ namespace Halite.Tests
     public class HalResourceDeserializationTests
     {
         [Fact]
+        public void DeserializeNull()
+        {
+            Deserialize<TurtleResource>("null").ShouldBeNull();
+        }
+
+        [Fact]
         public void VerifyDeserializeDummyResourceWithLinks()
         {
             const string json = "{\"_links\":{\"this\":{\"href\":\"/this\"},\"that\":{\"href\":\"/that\"},\"self\":{\"href\":\"/lambda\"},\"those\":[{\"href\":\"/quux\"},{\"href\":\"/xuuq\"}]}}";
@@ -49,6 +55,68 @@ namespace Halite.Tests
                 "{\"_links\":{\"self\":{\"href\":\"/turtle2\"}},\"_embedded\":{\"Down\":{\"_links\":{\"self\":{\"href\":\"/turtle1\"}},\"_embedded\":{\"Down\":{\"_links\":{\"self\":{\"href\":\"/turtle0\"}}}}}}}";
             var turtle = Deserialize<TurtleResource>(json);
             VerifyTurtles(turtle, "/turtle2", "/turtle1", "/turtle0");
+        }
+
+        [Fact]
+        public void VerifyMinimalHumanResource()
+        {
+            string json =
+                @"{
+    ""_links"": {
+        ""self"": {
+          ""href"": ""/resources/human/6""
+        }
+    }
+}";
+            var hr = Deserialize<HumanResource>(json);
+            hr.Links.ShouldNotBeNull();
+            var self = hr.Links.Self;
+            self.ShouldNotBeNull();
+            self.Href.ToString().ShouldBe("/resources/human/6");
+            hr.Age.ShouldBe(default(int));
+            hr.Name.ShouldBeNull();
+        }
+
+        [Fact]
+        public void VerifyHumanResourceWithAge()
+        {
+            string json =
+                @"{
+    ""_links"": {
+        ""self"": {
+          ""href"": ""/resources/human/6""
+        }
+    },
+    ""Age"": 35
+}";
+            var hr = Deserialize<HumanResource>(json);
+            hr.Links.ShouldNotBeNull();
+            var self = hr.Links.Self;
+            self.ShouldNotBeNull();
+            self.Href.ToString().ShouldBe("/resources/human/6");
+            hr.Age.ShouldBe(35);
+            hr.Name.ShouldBeNull();
+        }
+
+        [Fact]
+        public void VerifyHumanResourceWithName()
+        {
+            string json =
+                @"{
+    ""_links"": {
+        ""self"": {
+          ""href"": ""/resources/human/6""
+        }
+    },
+    ""hr:name"": ""Peter Smith""
+}";
+            var hr = Deserialize<HumanResource>(json);
+            hr.Links.ShouldNotBeNull();
+            var self = hr.Links.Self;
+            self.ShouldNotBeNull();
+            self.Href.ToString().ShouldBe("/resources/human/6");
+            hr.Age.ShouldBe(default(int));
+            hr.Name.ShouldBe("Peter Smith");
         }
 
         private static T Deserialize<T>(string json)

@@ -10,6 +10,7 @@ namespace Halite.Serialization.JsonNet
         private static string GetOverridingPropertyName(PropertyInfo p)
         {
             return p.GetCustomAttribute<HalRelationAttribute>()?.Name ??
+                   p.GetCustomAttribute<HalPropertyAttribute>()?.Name ??
                    p.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName;
         }
 

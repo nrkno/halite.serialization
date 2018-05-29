@@ -9,7 +9,7 @@ namespace Halite.Serialization.JsonNet
     {
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return JsonReader<HalLinks>.Read(reader, objectType, (HalLinks)existingValue, serializer);
+            return new HalObjectDeserializer(objectType, serializer).Deserialize(reader);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
