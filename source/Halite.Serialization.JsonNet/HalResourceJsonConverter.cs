@@ -70,7 +70,20 @@ namespace Halite.Serialization.JsonNet
             }
             else if (serializer.NullValueHandling == NullValueHandling.Include)
             {
-                jo.Add(name, null);
+                if (prop.CustomAttributes != null && prop.CustomAttributes.Any())
+                {
+                    var customJsonProperty = (JsonPropertyAttribute)prop.GetCustomAttribute(typeof(JsonPropertyAttribute));
+                    var overriddenNullValueHandling = customJsonProperty.NullValueHandling;
+
+                    if (!overriddenNullValueHandling.Equals(NullValueHandling.Ignore))
+                    {
+                        jo.Add(name, null);
+                    }
+                }
+                else
+                {
+                    jo.Add(name, null);
+                }
             }
         }
 

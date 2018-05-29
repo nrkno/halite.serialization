@@ -75,13 +75,13 @@ namespace Halite.Tests
         [Fact]
         public void VerifyResourceSerializationRespectNamingStrategy()
         {
-            var snake = new SnakeResource { Links = new HalLinks(new SelfLink("/snake")) , LongTail = "yes"};
+            var snake = new SnakeResource { Links = new HalLinks(new SelfLink("/snake")) , LongTail = "yes", Name = "Kozmo"};
 
             var settings = new JsonSerializerSettings { ContractResolver = new CustomSnakeCasingContractResolver() };
             settings.ConfigureForHalite();
 
             var json = JsonConvert.SerializeObject(snake, settings);
-            var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}},\"long_tail\":\"yes\"}";
+            var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}},\"long_tail\":\"yes\",\"name\":\"Kozmo\"}";
             json.ShouldBe(expectedJson);
         }
 
@@ -98,7 +98,7 @@ namespace Halite.Tests
             settings.ConfigureForHalite();
 
             var json = JsonConvert.SerializeObject(snake, settings);
-            var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}},\"LongTail\":null}";
+            var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}},\"LongTail\":null}"; // Name has null-setting as property
             json.ShouldBe(expectedJson);
         }
 
@@ -118,7 +118,7 @@ namespace Halite.Tests
             var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}}}";
             json.ShouldBe(expectedJson);
         }
-
+        
         private static string Serialize(object obj)
         {
             var settings = new JsonSerializerSettings
