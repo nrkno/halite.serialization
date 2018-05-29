@@ -9,6 +9,12 @@ namespace Halite.Tests
     public class HalLinkDeserializationTests
     {
         [Fact]
+        public void DeserializeNull()
+        {
+            Deserialize<HalLink>("null").ShouldBeNull();
+        }
+
+        [Fact]
         public void VerifyBasicDeserializationToHalLink()
         {
             const string json = "{\"href\":\"/things/1\"}";
@@ -98,7 +104,6 @@ namespace Halite.Tests
             const string json = "{}";
             Assert.Throws<JsonSerializationException>(() => JsonConvert.DeserializeObject<HalLink>(json));
         }
-
 
         [Fact]
         public void VerifyCantDeserializeWithoutHref()

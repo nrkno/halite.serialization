@@ -8,6 +8,7 @@ namespace Halite.Tests
 {
     public class HalResourceSerializationTests
     {
+
         [Fact]
         public void VerifyResourceWithLinks()
         {
