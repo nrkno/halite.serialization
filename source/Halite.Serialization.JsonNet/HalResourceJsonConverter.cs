@@ -72,6 +72,8 @@ namespace Halite.Serialization.JsonNet
                 if (prop.CustomAttributes != null && prop.CustomAttributes.Any())
                 {
                     var customJsonProperty = (JsonPropertyAttribute)prop.GetCustomAttribute(typeof(JsonPropertyAttribute));
+                    if (customJsonProperty == null) return;
+
                     var overriddenNullValueHandling = customJsonProperty.NullValueHandling;
 
                     if (!overriddenNullValueHandling.Equals(NullValueHandling.Ignore))
