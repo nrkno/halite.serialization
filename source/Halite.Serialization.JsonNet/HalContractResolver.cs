@@ -148,7 +148,18 @@ namespace Halite.Serialization.JsonNet
             var c = method as ConstructorInfo;
             if (c != null)
             {
-                return a => c.Invoke(a);
+                return a =>
+                {
+                    try
+                    {
+                        return c.Invoke(a);
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        if (ex.InnerException == null) throw;
+                        throw new JsonSerializationException(ex.InnerException.Message, ex.InnerException);
+                    }
+                };
             }
 
             return a => method.Invoke(null, a);

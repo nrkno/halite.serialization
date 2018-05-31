@@ -15,11 +15,6 @@ namespace Halite.Serialization.JsonNet
 
             settings.ContractResolver = new HalContractResolver();
 
-            //foreach (var c in GetHaliteConverters())
-            //{
-            //    settings.Converters.Add(c);
-            //}
-
             return settings;
         }
 
@@ -30,20 +25,9 @@ namespace Halite.Serialization.JsonNet
                 throw new ArgumentNullException(nameof(serializer));
             }
 
-            foreach (var c in GetHaliteConverters())
-            {
-                serializer.Converters.Add(c);
-            }
+            serializer.ContractResolver = new HalContractResolver();
 
             return serializer;
-        }
-
-        private static IEnumerable<JsonConverter> GetHaliteConverters()
-        {
-            yield return new HalLinkJsonConverter();
-            yield return new HalLinksJsonConverter();
-            yield return new HalEmbeddedJsonConverter();
-            yield return new HalResourceJsonConverter();
         }
     }
 }

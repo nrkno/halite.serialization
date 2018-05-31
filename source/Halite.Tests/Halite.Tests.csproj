@@ -56,7 +56,6 @@
     <Compile Include="HalTemplatedLinkSerializationTests.cs" />
     <Compile Include="HumanResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyNameMapperFactoryTests.cs" />
     <Compile Include="SnakeResource.cs" />
     <Compile Include="ThatLink.cs" />
     <Compile Include="ThisLink.cs" />

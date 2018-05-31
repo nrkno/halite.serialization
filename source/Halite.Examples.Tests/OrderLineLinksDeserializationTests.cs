@@ -19,7 +19,8 @@ namespace Halite.Examples.Tests
 
         private static T Deserialize<T>(string json)
         {
-            return JsonConvert.DeserializeObject<T>(json, new HalLinkJsonConverter(), new HalLinksJsonConverter());
+            var settings = new JsonSerializerSettings().ConfigureForHalite();
+            return JsonConvert.DeserializeObject<T>(json, settings);
         }
     }
 }
