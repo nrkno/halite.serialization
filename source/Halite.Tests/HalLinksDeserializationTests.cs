@@ -141,7 +141,9 @@ namespace Halite.Tests
 
         private static T Deserialize<T>(string json)
         {
-            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings().ConfigureForHalite());
+            var settings = new JsonSerializerSettings().ConfigureForHalite();
+            settings.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
+            return JsonConvert.DeserializeObject<T>(json, settings);
         }
     }
 

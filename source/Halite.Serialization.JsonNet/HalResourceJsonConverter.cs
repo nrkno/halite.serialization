@@ -31,6 +31,9 @@ namespace Halite.Serialization.JsonNet
                 .SelectMany(it => it.GetImmediateProperties())
                 .ToList();
 
+            var nameMapper = PropertyNameMapperFactory.Create(objectType);
+            var niceJsonPropertyNames = properties.Select(p => nameMapper(p.Name)).ToList();
+
             var linksProperty = properties.Single(p => string.Equals("Links", p.Name, StringComparison.InvariantCultureIgnoreCase));
             var embeddedProperty = properties.SingleOrDefault(p => string.Equals("Embedded", p.Name, StringComparison.InvariantCultureIgnoreCase));
             var halResourceProperties = new[] {linksProperty, embeddedProperty}.Where(it => it != null);

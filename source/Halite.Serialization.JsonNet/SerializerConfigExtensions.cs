@@ -13,10 +13,12 @@ namespace Halite.Serialization.JsonNet
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            foreach (var c in GetHaliteConverters())
-            {
-                settings.Converters.Add(c);
-            }
+            settings.ContractResolver = new HalContractResolver();
+
+            //foreach (var c in GetHaliteConverters())
+            //{
+            //    settings.Converters.Add(c);
+            //}
 
             return settings;
         }

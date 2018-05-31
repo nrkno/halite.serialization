@@ -19,14 +19,16 @@ namespace Halite.Tests
         {
             const string json = "{\"_links\":{\"this\":{\"href\":\"/this\"},\"that\":{\"href\":\"/that\"},\"self\":{\"href\":\"/lambda\"},\"those\":[{\"href\":\"/quux\"},{\"href\":\"/xuuq\"}]}}";
             var resource = Deserialize<DummyResourceWithLinks>(json);
+            resource.Links.ShouldNotBeNull();
             resource.Links.Self.Href.ToString().ShouldBe("/lambda");
         }
 
         [Fact]
-        public void VerifyDeserializeDummyResrouceWithPrivateConstructor()
+        public void VerifyDeserializeDummyResourceWithPrivateConstructor()
         {
             const string json = "{\"_links\":{\"this\":{\"href\":\"/this\"},\"that\":{\"href\":\"/that\"},\"self\":{\"href\":\"/lambda\"},\"those\":[{\"href\":\"/quux\"},{\"href\":\"/xuuq\"}]}}";
             var resource = Deserialize<DummyResourceWithPrivateConstructor>(json);
+            resource.Links.ShouldNotBeNull();
             resource.Links.Self.Href.ToString().ShouldBe("/lambda");
         }
 
