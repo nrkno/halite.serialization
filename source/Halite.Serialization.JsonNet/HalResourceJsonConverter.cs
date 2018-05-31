@@ -72,19 +72,29 @@ namespace Halite.Serialization.JsonNet
             }
             else if (serializer.NullValueHandling == NullValueHandling.Include)
             {
-                if (prop.CustomAttributes != null && prop.CustomAttributes.Any())
+                try
                 {
-                    var customJsonProperty = (JsonPropertyAttribute)prop.GetCustomAttribute(typeof(JsonPropertyAttribute));
-                    var overriddenNullValueHandling = customJsonProperty.NullValueHandling;
+                    if (prop.CustomAttributes != null && prop.CustomAttributes.Any())
+                    {
+                        var customJsonProperty =
+                            (JsonPropertyAttribute) prop.GetCustomAttribute(typeof(JsonPropertyAttribute));
+                        if (customJsonProperty == null) return;
 
-                    if (!overriddenNullValueHandling.Equals(NullValueHandling.Ignore))
+                        var overriddenNullValueHandling = customJsonProperty.NullValueHandling;
+
+                        if (!overriddenNullValueHandling.Equals(NullValueHandling.Ignore))
+                        {
+                            jo.Add(name, null);
+                        }
+                    }
+                    else
                     {
                         jo.Add(name, null);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    jo.Add(name, null);
+                    throw new JsonWriterException($"Failed to add property with name {name} and value null!", ex);
                 }
             }
         }

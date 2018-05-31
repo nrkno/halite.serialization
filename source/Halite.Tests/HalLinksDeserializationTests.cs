@@ -139,6 +139,19 @@ namespace Halite.Tests
             links.FizzBuzzLink.Href.ToString().ShouldBe("/1/2/fizz/4/buzz");
         }
 
+        [Fact]
+        public void VerifyDummyLinksDeserializationWithNullValueHandlingPropertySet()
+        {
+            const string json = "{\"self\":{\"href\":\"/things/1\"},\"this\":{\"href\":\"/this\"}}";
+            var links = Deserialize<DummyLinksWithNullValueHandling>(json);
+            var selfLink = links.Self;
+            selfLink.Href.ToString().ShouldBe("/things/1");
+            selfLink.Templated.ShouldBeNull();
+            var thisLink = links.This;
+            thisLink.Href.ToString().ShouldBe("/this");
+            links.That.ShouldBeNull();
+        }
+
         private static T Deserialize<T>(string json)
         {
             var settings = new JsonSerializerSettings().ConfigureForHalite();
