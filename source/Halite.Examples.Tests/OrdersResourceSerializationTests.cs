@@ -22,14 +22,10 @@ namespace Halite.Examples.Tests
         {
             var serializer = new JsonSerializer
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 Formatting = Formatting.Indented,
-                Converters =
+                ContractResolver = new HalContractResolver
                 {
-                    new HalLinkJsonConverter(),
-                    new HalLinksJsonConverter(),
-                    new HalEmbeddedJsonConverter(),
-                    new HalResourceJsonConverter()
+                    NamingStrategy = new CamelCaseNamingStrategy()
                 }
             };
 

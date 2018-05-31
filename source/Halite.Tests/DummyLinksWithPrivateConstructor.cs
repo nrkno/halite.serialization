@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Halite.Tests
 {
     internal class DummyLinksWithPrivateConstructor : HalLinks
     {
+        [JsonConstructor]
         private DummyLinksWithPrivateConstructor(SelfLink self, ThisLink @this, ThatLink that, IReadOnlyList<HalLink> those) : base(self)
         {
             This = @this;

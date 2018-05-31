@@ -120,23 +120,10 @@ namespace Halite.Tests
             link.Href.ToString().ShouldBe("/things/1");
         }
 
-        [Fact]
-        public void VerifyHrefCannotBeNumber()
-        {
-            const string json = "{\"href\":0}";
-            Assert.Throws<JsonSerializationException>(() => Deserialize<HalLink>(json));
-        }
-
-        [Fact]
-        public void VerifyHrefCannotBeBoolean()
-        {
-            const string json = "{\"href\":true}";
-            Assert.Throws<JsonSerializationException>(() => Deserialize<HalLink>(json));
-        }
-
         private static T Deserialize<T>(string json) where T : HalLinkObject
         {
-            return JsonConvert.DeserializeObject<T>(json, new HalLinkJsonConverter());
+            var settings = new JsonSerializerSettings().ConfigureForHalite();
+            return JsonConvert.DeserializeObject<T>(json, settings);
         }
     }
 }

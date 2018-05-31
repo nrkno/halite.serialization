@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace Halite.Tests
 {
     internal class DtoLinks : HalLinks

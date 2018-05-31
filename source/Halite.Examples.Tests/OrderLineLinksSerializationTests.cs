@@ -19,7 +19,8 @@ namespace Halite.Examples.Tests
 
         private static string Serialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj, new HalLinkJsonConverter(), new HalLinksJsonConverter());
+            var settings = new JsonSerializerSettings().ConfigureForHalite();
+            return JsonConvert.SerializeObject(obj, settings);
         }
     }
 }

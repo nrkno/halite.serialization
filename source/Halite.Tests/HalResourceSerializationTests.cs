@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Shouldly;
 using Xunit;
 
@@ -8,7 +9,6 @@ namespace Halite.Tests
 {
     public class HalResourceSerializationTests
     {
-
         [Fact]
         public void VerifyResourceWithLinks()
         {
@@ -78,8 +78,13 @@ namespace Halite.Tests
         {
             var snake = new SnakeResource { Links = new HalLinks(new SelfLink("/snake")) , LongTail = "yes", Name = "Kozmo"};
 
-            var settings = new JsonSerializerSettings { ContractResolver = new CustomSnakeCasingContractResolver() };
-            settings.ConfigureForHalite();
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new HalContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                }
+            };
 
             var json = JsonConvert.SerializeObject(snake, settings);
             var expectedJson = "{\"_links\":{\"self\":{\"href\":\"/snake\"}},\"long_tail\":\"yes\",\"name\":\"Kozmo\"}";

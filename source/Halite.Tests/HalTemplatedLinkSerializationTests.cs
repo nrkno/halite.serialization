@@ -42,7 +42,8 @@ namespace Halite.Tests
 
         private static string Serialize<T>(T link) where T : HalTemplatedLink
         {
-            return JsonConvert.SerializeObject(link, new HalLinkJsonConverter());
+            var settings = new JsonSerializerSettings().ConfigureForHalite();
+            return JsonConvert.SerializeObject(link, settings);
         }
     }
 }
