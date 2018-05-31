@@ -66,7 +66,8 @@ namespace Halite.Serialization.JsonNet
                 AssignValues(objectType, instance, jo);
 
                 return instance;
-            } else if (reader.TokenType == JsonToken.Null)
+            }
+            else if (reader.TokenType == JsonToken.Null)
             {
                 return null;
             }

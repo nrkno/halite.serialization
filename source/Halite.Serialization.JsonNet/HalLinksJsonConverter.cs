@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -34,9 +35,43 @@ namespace Halite.Serialization.JsonNet
             foreach (var prop in properties.Where(p => p.CanRead))
             {
                 var propVal = prop.GetValue(value, null);
+                var name = prop.GetRelationName(serializer);
+
                 if (propVal != null)
                 {
-                    jo.Add(prop.GetRelationName(serializer), JToken.FromObject(propVal, serializer));
+                    try { 
+                        jo.Add(name, JToken.FromObject(propVal, serializer));
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new JsonWriterException($"Failed to add property with name {name} and value {propVal}!", ex);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        if (prop.CustomAttributes != null && prop.CustomAttributes.Any())
+                        { 
+                            var customJsonProperty = (JsonPropertyAttribute)prop.GetCustomAttribute(typeof(JsonPropertyAttribute));
+                            if (customJsonProperty == null) return;
+
+                            var overriddenNullValueHandling = customJsonProperty.NullValueHandling;
+
+                            if (!overriddenNullValueHandling.Equals(NullValueHandling.Ignore))
+                            {
+                                jo.Add(name, null);
+                            }
+                        }
+                        else
+                        {
+                            jo.Add(name, null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new JsonWriterException($"Failed to add property with name {value} and value null!", ex);
+                    }
                 }
             }
 
