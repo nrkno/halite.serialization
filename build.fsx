@@ -6,6 +6,9 @@ open Fake.Testing.XUnit2
 open Fake.PaketTemplate
 
 let buildDir = "./build/"
+let buildNetStandard20Dir = buildDir @@ "netstandard20"
+let buildNet461Dir = buildDir @@ "net461"
+
 let testProjects = "./source/*Tests/*.csproj"
 let testOutputDir = "./tests/"
 let projectReferences = "./source/Halite.Serialization.JsonNet/Halite.Serialization.JsonNet.csproj" 
@@ -43,10 +46,18 @@ Target "AddAssemblyVersion" (fun _ ->
             AssemblyVersion = version })  
 )
 
-Target "Build" (fun _ -> 
+Target "BuildNet461" (fun _ -> 
     DotNetCli.Build (fun p -> 
         { p with
-            Output = "../../" + buildDir
+            Output = "../../" @@ buildNet461Dir
+            Configuration = "Release"
+            Project = projectReferences }) 
+)
+
+Target "BuildNetStandard20" (fun _ -> 
+    DotNetCli.Build (fun p -> 
+        { p with
+            Output = "../../" + buildNetStandard20Dir
             Configuration = "Release"
             Project = projectReferences }) 
 )
@@ -60,7 +71,8 @@ Target "RunTests" (fun _ ->
 )
 
 Target "CreatePaketTemplate" (fun _ ->
-  let targetLib = "lib/netstandard2.0"
+  let targetNetstandard20 = "lib/netstandard2.0"
+  let targetNet461 = "lib/net461"
   PaketTemplate (fun p ->
     {
         p with
@@ -70,9 +82,12 @@ Target "CreatePaketTemplate" (fun _ ->
           Id = Some projectName
           Version = Some version
           Authors = ["NRK"]
-          Files = [ Include (buildDir + "Halite.Serialization.JsonNet.dll", targetLib)
-                    Include (buildDir + "Halite.Serialization.JsonNet.pdb", targetLib)
-                    Include (buildDir + "Halite.Serialization.JsonNet.xml", targetLib) ]
+          Files = [ Include (buildNetStandard20Dir @@ "Halite.Serialization.JsonNet.dll", targetNetstandard20)
+                    Include (buildNetStandard20Dir @@ "Halite.Serialization.JsonNet.pdb", targetNetstandard20)
+                    Include (buildNetStandard20Dir @@ "Halite.Serialization.JsonNet.xml", targetNetstandard20)
+                    Include (buildNet461Dir @@ "Halite.Serialization.JsonNet.dll", targetNet461)
+                    Include (buildNet461Dir @@ "Halite.Serialization.JsonNet.pdb", targetNet461)
+                    Include (buildNet461Dir @@ "Halite.Serialization.JsonNet.xml", targetNet461) ]
           Dependencies = 
             [ "Halite", GreaterOrEqual (Version "1.2.58")
               "Newtonsoft.Json", GreaterOrEqual (Version "9.0.1") 
@@ -92,19 +107,6 @@ Target "CreatePackage" (fun _ ->
               ToolPath = toolPathPaket })
 )
 
-Target "CreateNugetPackage" (fun _ -> 
-    DotNetCli.Pack (fun c -> 
-        { c with
-            Configuration = "Release"
-            Project = projectReferences
-            AdditionalArgs = [ 
-                                "/p:PackageVersion=" + version
-                                "/p:Version=" + version]
-            OutputPath = "../../" + buildDir
-        }
-    )
-)
-
 Target "PushPackage" (fun _ ->
   Paket.Push (fun p -> 
       {
@@ -119,7 +121,8 @@ Target "PushPackage" (fun _ ->
 "Clean"
 ==> "AddAssemblyVersion"
 ==> "Restore"
-==> "Build"
+==> "BuildNetStandard20"
+==> "BuildNet461"
 ==> "BuildTests"
 ==> "RunTests"
 ==> "CreatePaketTemplate"
