@@ -107,19 +107,6 @@ Target "CreatePackage" (fun _ ->
               ToolPath = toolPathPaket })
 )
 
-Target "CreateNugetPackage" (fun _ -> 
-    DotNetCli.Pack (fun c -> 
-        { c with
-            Configuration = "Release"
-            Project = projectReferences
-            AdditionalArgs = [ "/p:PackageVersion=" + version
-                               "/p:Version=" + version
-                               "/p:TargetFrameworks=netstandard20;net461" ]
-            OutputPath = "../../" @@ nupkgDir
-        }
-    )
-)
-
 Target "PushPackage" (fun _ ->
   Paket.Push (fun p -> 
       {
