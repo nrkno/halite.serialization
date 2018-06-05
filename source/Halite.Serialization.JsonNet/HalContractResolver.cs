@@ -102,17 +102,6 @@ namespace Halite.Serialization.JsonNet
             if (embeddedProperty != null) yield return embeddedProperty;
         }
 
-        protected override IList<JsonProperty> CreateConstructorParameters(ConstructorInfo constructor, JsonPropertyCollection memberProperties)
-        {
-            var result = base.CreateConstructorParameters(constructor, memberProperties);
-            return result;
-        }
-
-        protected override JsonProperty CreatePropertyFromConstructorParameter(JsonProperty matchingMemberProperty, ParameterInfo parameterInfo)
-        {
-            return base.CreatePropertyFromConstructorParameter(matchingMemberProperty, parameterInfo);
-        }
-
         protected override JsonObjectContract CreateObjectContract(Type objectType)
         {
             var c = base.CreateObjectContract(objectType);
