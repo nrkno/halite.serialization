@@ -11,7 +11,7 @@ public class HalLinkDeserializationTests
     [Fact]
     public void DeserializeNull()
     {
-        Deserialize<HalLink>("null").ShouldBeNull();
+        MaybeDeserialize<HalLink>("null").ShouldBeNull();
     }
 
     [Fact]
@@ -120,17 +120,16 @@ public class HalLinkDeserializationTests
         link.Href.ToString().ShouldBe("/things/1");
     }
 
-    private static T Deserialize<T>(string json) where T : HalLinkObject
+    private static T Deserialize<T>(string json) where T : HalLinkObject =>
+        MaybeDeserialize<T>(json) switch
+        {
+            null => throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}"),
+            var deserialized => deserialized,
+        };
+
+    private static T? MaybeDeserialize<T>(string json) where T : HalLinkObject
     {
         var settings = new JsonSerializerSettings().ConfigureForHalite();
-        var deserialized = JsonConvert.DeserializeObject<T>(json, settings);
-        if (deserialized == null)
-        {
-            throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}");
-        }
-        else
-        {
-            return deserialized;
-        }
+        return JsonConvert.DeserializeObject<T>(json, settings);
     }
 }

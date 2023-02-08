@@ -12,7 +12,7 @@ public class HalResourceDeserializationTests
     [Fact]
     public void DeserializeNull()
     {
-        Deserialize<TurtleResource>("null").ShouldBeNull();
+        MaybeDeserialize<TurtleResource>("null").ShouldBeNull();
     }
 
     [Fact]
@@ -122,18 +122,15 @@ public class HalResourceDeserializationTests
         hr.Name.ShouldBe("Peter Smith");
     }
 
-    private static T Deserialize<T>(string json)
-    {
-        var deserialized = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings().ConfigureForHalite());
-        if (deserialized == null)
+    private static T Deserialize<T>(string json) =>
+        MaybeDeserialize<T>(json) switch
         {
-            throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}");
-        }
-        else
-        {
-            return deserialized;
-        }
-    }
+            null => throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}"),
+            var deserialized => deserialized,
+        };
+
+    private static T? MaybeDeserialize<T>(string json) =>
+        JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings().ConfigureForHalite());
 
     private static void VerifyTurtles(TurtleResource turtle, params string[] expectedLinks)
     {

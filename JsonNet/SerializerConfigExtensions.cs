@@ -1,7 +1,6 @@
 ﻿namespace Halite.Serialization.JsonNet;
 
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 public static class SerializerConfigExtensions
@@ -14,6 +13,7 @@ public static class SerializerConfigExtensions
         }
 
         settings.ContractResolver = new HalContractResolver();
+        settings.Converters.Add(new UriConverter());
 
         return settings;
     }
@@ -26,6 +26,7 @@ public static class SerializerConfigExtensions
         }
 
         serializer.ContractResolver = new HalContractResolver();
+        serializer.Converters.Add(new UriConverter());
 
         return serializer;
     }

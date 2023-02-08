@@ -211,5 +211,4 @@ public class HalContractResolver : DefaultContractResolver
     {
         return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(HalResource<>);
     }
-
 }

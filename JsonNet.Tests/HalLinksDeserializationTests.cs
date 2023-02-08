@@ -11,7 +11,7 @@ public class HalLinksDeserializationTests
     [Fact]
     public void DeserializeNull()
     {
-        Deserialize<HalLinks>("null").ShouldBeNull();
+        MaybeDeserialize<HalLinks>("null").ShouldBeNull();
     }
 
     [Fact]
@@ -152,20 +152,18 @@ public class HalLinksDeserializationTests
         links.That.ShouldBeNull();
     }
 
-    private static T Deserialize<T>(string json)
+    private static T Deserialize<T>(string json) =>
+        MaybeDeserialize<T>(json) switch
+        {
+            null => throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}"),
+            var deserialized => deserialized,
+        };
+
+    private static T? MaybeDeserialize<T>(string json)
     {
         var settings = new JsonSerializerSettings().ConfigureForHalite();
-        var deserialized = JsonConvert.DeserializeObject<T>(json, settings);
-        if (deserialized == null)
-        {
-            throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}");
-        }
-        else
-        {
-            return deserialized;
-        }
+        return JsonConvert.DeserializeObject<T>(json, settings);
     }
-
 }
 
 internal class AdhocHalLinks : HalLinks
