@@ -1,4 +1,4 @@
-namespace Halite.Tests;
+namespace Halite.Serialization.JsonNet.Tests;
 
 using JetBrains.Annotations;
 

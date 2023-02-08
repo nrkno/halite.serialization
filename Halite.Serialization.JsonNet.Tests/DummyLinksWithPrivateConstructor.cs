@@ -1,4 +1,4 @@
-namespace Halite.Tests;
+namespace Halite.Serialization.JsonNet.Tests;
 
 using System.Collections.Generic;
 using Newtonsoft.Json;

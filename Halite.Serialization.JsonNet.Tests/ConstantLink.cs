@@ -1,4 +1,4 @@
-﻿namespace Halite.Tests;
+﻿namespace Halite.Serialization.JsonNet.Tests;
 
 public class ConstantLink : HalLink
 {

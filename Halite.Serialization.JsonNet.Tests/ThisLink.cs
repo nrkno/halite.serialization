@@ -1,4 +1,4 @@
-namespace Halite.Tests;
+namespace Halite.Serialization.JsonNet.Tests;
 
 internal class ThisLink : HalLink
 {
