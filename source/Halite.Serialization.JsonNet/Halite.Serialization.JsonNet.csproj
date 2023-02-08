@@ -1,7 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <DocumentationFile>Halite.Serialization.JsonNet.xml</DocumentationFile>
-  </PropertyGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
-</Project>
