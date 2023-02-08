@@ -16,15 +16,14 @@ internal static class TypeExtensions
         }
     }
 
-    public static IEnumerable<PropertyInfo> GetImmediateProperties(this Type type)
-    {
-        return type.GetProperties(BindingFlags.Public
-                                    | BindingFlags.Instance
-                                    | BindingFlags.DeclaredOnly);
-    }
+    public static IEnumerable<PropertyInfo> GetImmediateProperties(this Type type) =>
+        type.GetProperties(
+            BindingFlags.Public
+            | BindingFlags.Instance
+            | BindingFlags.DeclaredOnly);
 
-    public static object GetDefaultValue(this Type t)
-    {
-        return t.IsValueType && Nullable.GetUnderlyingType(t) == null ? Activator.CreateInstance(t) : null;
-    }
+    public static object? GetDefaultValue(this Type t) =>
+        t.IsValueType && Nullable.GetUnderlyingType(t) == null
+        ? Activator.CreateInstance(t)
+        : null;
 }

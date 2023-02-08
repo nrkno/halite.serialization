@@ -154,13 +154,13 @@ public class HalContractResolver : DefaultContractResolver
         return a => method.Invoke(null, a);
     }
 
-    private static ConstructorInfo SelectConstructor(Type objectType)
+    private static ConstructorInfo? SelectConstructor(Type objectType)
     {
         return SelectHalLinkConstructor(objectType) ??
                 SelectSubclassConstructor(objectType);
     }
 
-    private static ConstructorInfo SelectHalLinkConstructor(Type objectType)
+    private static ConstructorInfo? SelectHalLinkConstructor(Type objectType)
     {
         if (objectType == typeof(HalLink) || objectType == typeof(HalTemplatedLink))
         {
@@ -176,7 +176,7 @@ public class HalContractResolver : DefaultContractResolver
         return parameters.Length == 1 && parameters[0].ParameterType == typeof(string);
     }
 
-    private static ConstructorInfo SelectSubclassConstructor(Type objectType)
+    private static ConstructorInfo? SelectSubclassConstructor(Type objectType)
     {
         var constructors = objectType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -195,7 +195,7 @@ public class HalContractResolver : DefaultContractResolver
         return constructors.SingleOrDefault(ctor => !ctor.GetParameters().Any());
     }
 
-    private static ConstructorInfo SelectConstructorWithParameters(IReadOnlyList<ConstructorInfo> ctors)
+    private static ConstructorInfo? SelectConstructorWithParameters(IReadOnlyList<ConstructorInfo> ctors)
     {
         return ctors.Count == 1 ? ctors[0] : null;
     }

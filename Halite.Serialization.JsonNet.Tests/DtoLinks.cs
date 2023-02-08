@@ -8,7 +8,7 @@ internal class DtoLinks : HalLinks
     {
     }
 
-    public HalLink Link1 { get; set; }
+    public HalLink? Link1 { get; set; }
 
-    public ThatLink Link2 { get; set; }
+    public ThatLink? Link2 { get; set; }
 }

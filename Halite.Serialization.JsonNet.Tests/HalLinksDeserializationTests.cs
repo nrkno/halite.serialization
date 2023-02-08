@@ -136,7 +136,7 @@ public class HalLinksDeserializationTests
         var links = Deserialize<FizzBuzzHalLinks>(json);
         links.Self.Href.ToString().ShouldBe("/icecream");
         links.FizzBuzzLink.ShouldNotBeNull();
-        links.FizzBuzzLink.Href.ToString().ShouldBe("/1/2/fizz/4/buzz");
+        links.FizzBuzzLink!.Href.ToString().ShouldBe("/1/2/fizz/4/buzz");
     }
 
     [Fact]
@@ -177,5 +177,5 @@ internal class FizzBuzzHalLinks : HalLinks
     }
 
     [JsonProperty(PropertyName = "fizz:buzz")]
-    public HalLink FizzBuzzLink { get; set; }
+    public HalLink? FizzBuzzLink { get; set; }
 }

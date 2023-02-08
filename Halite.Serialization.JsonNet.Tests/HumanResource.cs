@@ -21,5 +21,5 @@ internal class HumanLinks : HalLinks
     {
     }
 
-    public HalLink Next { get; set; }
+    public HalLink? Next { get; set; }
 }

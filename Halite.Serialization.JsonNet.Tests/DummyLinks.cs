@@ -45,7 +45,7 @@ internal class DummyLinksWithNotNullThis : HalLinks
 
 internal class DummyLinksWithNullValueHandling : HalLinks
 {
-    public DummyLinksWithNullValueHandling(SelfLink self, [NotNull] ThisLink @this, ThatLink that, IReadOnlyList<HalLink> those) : base(self)
+    public DummyLinksWithNullValueHandling(SelfLink self, [NotNull] ThisLink @this, ThatLink? that, IReadOnlyList<HalLink> those) : base(self)
     {
         This = @this;
         That = that;
@@ -58,7 +58,7 @@ internal class DummyLinksWithNullValueHandling : HalLinks
     [HalRelation("that")]
     [JsonProperty(NullValueHandling = NullValueHandling.Include)]
     [CanBeNull]
-    public ThatLink That { get; }
+    public ThatLink? That { get; }
 
     [HalRelation("those")]
     public IReadOnlyList<HalLink> Those { get; }
