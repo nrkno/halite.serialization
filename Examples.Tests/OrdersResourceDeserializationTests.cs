@@ -1,6 +1,6 @@
 ﻿namespace Halite.Serialization.Examples.Tests;
 
-using System.Collections.Generic;
+using System;
 using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -27,6 +27,14 @@ public class OrdersResourceDeserializationTests
             }
         };
 
-        return JsonConvert.DeserializeObject<T>(json, settings);
+        var deserialized = JsonConvert.DeserializeObject<T>(json, settings);
+        if (deserialized == null)
+        {
+            throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}");
+        }
+        else
+        {
+            return deserialized;
+        }
     }
 }

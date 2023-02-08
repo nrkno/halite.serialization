@@ -155,8 +155,17 @@ public class HalLinksDeserializationTests
     private static T Deserialize<T>(string json)
     {
         var settings = new JsonSerializerSettings().ConfigureForHalite();
-        return JsonConvert.DeserializeObject<T>(json, settings);
+        var deserialized = JsonConvert.DeserializeObject<T>(json, settings);
+        if (deserialized == null)
+        {
+            throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}");
+        }
+        else
+        {
+            return deserialized;
+        }
     }
+
 }
 
 internal class AdhocHalLinks : HalLinks

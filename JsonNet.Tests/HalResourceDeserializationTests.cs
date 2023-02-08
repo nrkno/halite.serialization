@@ -1,5 +1,6 @@
 namespace Halite.Serialization.JsonNet.Tests;
 
+using System;
 using System.Linq;
 using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
@@ -123,7 +124,15 @@ public class HalResourceDeserializationTests
 
     private static T Deserialize<T>(string json)
     {
-        return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings().ConfigureForHalite());
+        var deserialized = JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings().ConfigureForHalite());
+        if (deserialized == null)
+        {
+            throw new NullReferenceException($"{nameof(JsonConvert.DeserializeObject)} returned null for JSON: {json}");
+        }
+        else
+        {
+            return deserialized;
+        }
     }
 
     private static void VerifyTurtles(TurtleResource turtle, params string[] expectedLinks)
