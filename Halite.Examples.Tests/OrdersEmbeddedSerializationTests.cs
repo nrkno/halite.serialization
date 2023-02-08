@@ -5,18 +5,21 @@ using System.IO;
 using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Quibble.CSharp;
 using Shouldly;
 using Xunit;
 
 public class OrdersEmbeddedSerializationTests
 {
-    [Fact(Skip="Dependent on JSON-file whitespace")]
+    [Fact]
     public void VerifySerialization()
     {
         var embedded = CreateOrdersEmbedded();
         var json = Serialize(embedded);
         json.ShouldNotBeNull();
-        json.ShouldBe(JsonTestFile.OrdersEmbedded);
+
+        var diffs = JsonStrings.TextDiff(json, JsonTestFile.OrdersEmbedded);
+        diffs.ShouldBeEmpty();
     }
 
     private static OrdersEmbedded CreateOrdersEmbedded()

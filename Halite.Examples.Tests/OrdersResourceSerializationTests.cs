@@ -5,17 +5,21 @@ using System.IO;
 using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Quibble.CSharp;
 using Shouldly;
 using Xunit;
 
 public class OrdersResourceSerializationTests
 {
-    [Fact(Skip="Dependent on JSON-file whitespace")]
+    [Fact]
     public void VerifyOrdersResourceSerialization()
     {
         var resource = CreateOrdersResource();
         var json = Serialize(resource);
-        json.ShouldBe(JsonTestFile.OrdersResource);
+        json.ShouldNotBeNull();
+
+        var diffs = JsonStrings.TextDiff(json, JsonTestFile.OrdersResource);
+        diffs.ShouldBeEmpty();
     }
 
     private static string Serialize(object o)
