@@ -1,4 +1,4 @@
-﻿namespace Halite.Examples.Tests;
+﻿namespace Halite.Serialization.Examples.Tests;
 
 using System;
 using System.IO;

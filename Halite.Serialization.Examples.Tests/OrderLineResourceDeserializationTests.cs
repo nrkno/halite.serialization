@@ -1,4 +1,4 @@
-﻿namespace Halite.Examples.Tests;
+﻿namespace Halite.Serialization.Examples.Tests;
 
 using System.Collections.Generic;
 using Halite.Serialization.JsonNet;

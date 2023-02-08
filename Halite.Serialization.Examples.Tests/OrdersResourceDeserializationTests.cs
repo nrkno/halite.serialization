@@ -1,19 +1,20 @@
-namespace Halite.Examples.Tests;
+﻿namespace Halite.Serialization.Examples.Tests;
 
+using System.Collections.Generic;
 using Halite.Serialization.JsonNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shouldly;
 using Xunit;
 
-public class OrdersEmbeddedDeserializationTests
+public class OrdersResourceDeserializationTests
 {
     [Fact]
-    public void VerifyOrdersResource()
+    public void VerifyOrdersResourceDeserialization()
     {
-        var json = JsonTestFile.OrdersEmbedded;
-        var embedded = Deserialize<OrdersEmbedded>(json);
-        embedded.ShouldNotBeNull();
+        var json = JsonTestFile.OrdersResource;
+        var resource = Deserialize<OrdersResource>(json);
+        resource.ShouldNotBeNull();
     }
 
     private static T Deserialize<T>(string json)

@@ -1,4 +1,4 @@
-﻿namespace Halite.Examples;
+﻿namespace Halite.Serialization.Examples;
 
 using System.Collections.Generic;
 

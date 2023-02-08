@@ -1,4 +1,4 @@
-﻿namespace Halite.Examples;
+﻿namespace Halite.Serialization.Examples;
 
 public class OrdersResource : HalResource<OrdersLinks, OrdersEmbedded>
 {

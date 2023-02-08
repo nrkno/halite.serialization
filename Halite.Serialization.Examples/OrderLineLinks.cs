@@ -1,4 +1,4 @@
-﻿namespace Halite.Examples;
+﻿namespace Halite.Serialization.Examples;
 
 using Halite;
 using JetBrains.Annotations;
