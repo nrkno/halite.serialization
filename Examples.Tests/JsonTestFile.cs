@@ -1,9 +1,5 @@
 ﻿namespace Halite.Serialization.Examples.Tests;
 
-using System;
-using System.IO;
-using System.Reflection;
-
 public static class JsonTestFile
 {
     public const string OrdersEmbedded =
