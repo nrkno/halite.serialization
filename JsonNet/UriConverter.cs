@@ -3,9 +3,6 @@
 using System;
 using Newtonsoft.Json;
 
-/*
- * This converter is currently not working properly.
- */
 public class UriConverter : JsonConverter<Uri>
 {
     public override void WriteJson(JsonWriter writer, Uri? uri, JsonSerializer serializer)
@@ -16,19 +13,20 @@ public class UriConverter : JsonConverter<Uri>
         }
         else
         {
-            /*
-             * System.Text.Json is able to encode System.Uri properly, but how?
-             * The source seems to be doing exactly the same as we're doing here:
-             * https://github.com/dotnet/runtime/blob/main/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UriConverter.cs
-             */
-            writer.WriteValue(uri.OriginalString);
+            writer.WriteValue(uri.PercentEncodedUrl());
         }
     }
 
-    public override Uri? ReadJson(JsonReader reader, Type objectType, Uri? existingUri, bool hasExistingValue, JsonSerializer serializer) =>
-        reader.Value switch
+    public override Uri? ReadJson(JsonReader reader, Type objectType, Uri? existingUri, bool hasExistingValue, JsonSerializer serializer)
+    {
+        var uriString = reader.Value as string;
+        try
         {
-            string uri => new Uri(uri, UriKind.RelativeOrAbsolute),
-            _ => null,
-        };
+            return new Uri(uriString, UriKind.RelativeOrAbsolute);
+        }
+        catch (Exception error)
+        {
+            throw new JsonReaderException($"Unable to create {nameof(System.Uri)} from {uriString}", error);
+        }
+    }
 }
