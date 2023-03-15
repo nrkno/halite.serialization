@@ -40,12 +40,12 @@ public class HalLinkSerializationTests
         json.ShouldBe("{\"href\":\"/user/{userId}\",\"type\":\"application/hal+json\"}");
     }
 
-    [Fact(Skip="Percent-encoding is currently not working")]
+    [Fact]
     public void VerifyPercentEncoding()
     {
         var link = new HalLink("/øl");
         var json = Serialize(link);
-        json.ShouldBe(@"{""href"":""/\u00F8l""}");
+        json.ShouldBe(@"{""href"":""/%C3%B8l""}");
     }
 
     private static string Serialize<T>(T link) where T : HalLink

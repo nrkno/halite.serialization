@@ -2,15 +2,37 @@
 
 using System;
 
-/*
- * System.Text.Json is able to encode System.Uri properly, but how?
- * The source seems to be doing exactly the same as we're doing here:
- * https://github.com/dotnet/runtime/blob/main/src/libraries/System.Text.Json/src/System/Text/Json/Serialization/Converters/Value/UriConverter.cs
- */
 public static class UriExtension
 {
+    private static Uri FakeBaseUri = new Uri("https://host", UriKind.Absolute);
+
     public static string PercentEncodedUrl(this Uri uri)
     {
-        return uri.OriginalString;
+        if (uri.IsAbsoluteUri)
+        {
+            return uri.AbsoluteUri;
+        }
+        else if (uri.IsTemplated())
+        {
+            /*
+            * Denne løsningen fungerer ikke for lenker som er templated
+            * og som innholder tegn som må prosent-enkodes.
+            */
+            return uri.OriginalString;
+        }
+        else
+        {
+            var absoluteUri = new Uri(FakeBaseUri, uri);
+            return absoluteUri.PathAndQuery;
+        }
     }
+
+    /*
+     * Dette er en håpløst dårlig måte å sjekke om en URI er en del
+     * av en lenker som er templated.
+     * Denne informasjonen finnes egentlig i HalLinkObject,
+     * og burde hentes derfra, i stedet for å gjenoppdages her.
+     */
+    private static bool IsTemplated(this Uri uri) =>
+        uri.OriginalString.Contains("{");
 }
