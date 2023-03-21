@@ -13,6 +13,7 @@ public class UriExtensionTests
     [InlineData("https://www.nrk.no/drikke?litt=øl", UriKind.RelativeOrAbsolute, "https://www.nrk.no/drikke?litt=%C3%B8l")]
     [InlineData("/drikke?litt=øl", UriKind.Relative, "/drikke?litt=%C3%B8l")]
     [InlineData("/en/{templated}/lenke", UriKind.Relative, "/en/{templated}/lenke")]
+    [InlineData("/en/{templated}/lenke/som/{erTemplated}/igjen", UriKind.Relative, "/en/{templated}/lenke/som/{erTemplated}/igjen")]
     public void ShouldPercentEncodeUri(string givenUrl, UriKind withKind, string expectUrl) =>
         (new Uri(givenUrl, withKind)).PercentEncodedUrl().ShouldBe(expectUrl);
 }

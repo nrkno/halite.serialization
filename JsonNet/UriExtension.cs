@@ -1,10 +1,13 @@
 ﻿namespace Halite.Serialization.JsonNet;
 
 using System;
+using System.Text.RegularExpressions;
 
 public static class UriExtension
 {
     private static Uri FakeBaseUri = new Uri("https://host", UriKind.Absolute);
+
+    private static Regex TemplatedUrlPattern = new Regex(@"[{][a-zæøå]*[}]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     public static string PercentEncodedUrl(this Uri uri)
     {
@@ -12,12 +15,8 @@ public static class UriExtension
         {
             return uri.AbsoluteUri;
         }
-        else if (uri.IsTemplated())
+        else if (TemplatedUrlPattern.IsMatch(uri.OriginalString))
         {
-            /*
-            * Denne løsningen fungerer ikke for lenker som er templated
-            * og som innholder tegn som må prosent-enkodes.
-            */
             return uri.OriginalString;
         }
         else
@@ -26,13 +25,4 @@ public static class UriExtension
             return absoluteUri.PathAndQuery;
         }
     }
-
-    /*
-     * Dette er en håpløst dårlig måte å sjekke om en URI er en del
-     * av en lenker som er templated.
-     * Denne informasjonen finnes egentlig i HalLinkObject,
-     * og burde hentes derfra, i stedet for å gjenoppdages her.
-     */
-    private static bool IsTemplated(this Uri uri) =>
-        uri.OriginalString.Contains("{");
 }
